@@ -1,25 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
-import  { Redirect } from 'react-router-dom'
-import { Button, TextField, Grid, Typography, Link, SnackbarContent, Snackbar, IconButton } from '@material-ui/core';
+import React, { useState } from 'react';
+import { green } from '@material-ui/core/colors';
+import { Button, TextField, Grid, Typography, SnackbarContent, Snackbar, IconButton, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import ErrorIcon from '@material-ui/icons/ErrorOutline';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import firebaseImpl from '../../Utils/firebase';
-import firebase from 'firebase';
-import GoogleButton from 'react-google-button'
-import './login.css';
 
-export default function Login() {
-    
-    const provider = useRef("");
-
+export default function ForgotPassword() {
     const classes = useStyles();
-    const [form, setForm] = useState({ email: "", password: "", error: null, snack: { vertical: 'left', horizontal: 'top', open: false } });
+    const [form, setForm] = useState({ email: "", error: null, classe: "", snack: { open: false } });
 
-    useEffect(() => {
-        provider.current =  new firebase.auth.GoogleAuthProvider();   
-    }, []);
-   
     function handleChange(e) {
         e.preventDefault();
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -29,25 +20,12 @@ export default function Login() {
         e.preventDefault();
         const user = firebaseImpl
             .auth()
-            .signInWithEmailAndPassword(form.email, form.password);
-        user
-            .then(r => {
-                return <Redirect to='/home'/>;
-            })
-            .catch(e => {
-                console.log(e);
-                setForm({ ...form, error: "Usuário e/ou senha inválidos! Tente novamente." , snack: { ...form.snack, open: true } });
-            });
-    }
+            .sendPasswordResetEmail(form.email);
 
-    function handleGoogleLogin(e){
-        e.preventDefault();
-        const loginWithGoogle = firebaseImpl.auth().signInWithPopup(provider.current);
-
-        loginWithGoogle.then(response => {
-            console.log(response);
-        }).catch(e=> {
-            console.log(e);
+        user.then(response => {
+            setForm({...form, error: "Solicitação enviada!", classe: "success", snack: {open: true}})
+        }).catch(e => {
+            setForm({...form, classe: "error", error: "Não foi possível validar e-mail, verifique e tente novamente!", snack: {open: true}})
         });
     }
 
@@ -67,7 +45,7 @@ export default function Login() {
                 autoHideDuration={6000}
             >
                 <SnackbarContent
-                    className={classes.error}
+                    className={classes[form.classe]}
                     aria-describedby="client-snackbar"
                     message={
                         <span id="client-snackbar" className={classes.message}>
@@ -87,21 +65,12 @@ export default function Login() {
             </Typography>
             <form onSubmit={handleSubmitCredentials} autoComplete="off">
                 <div className="form-container">
+                    <Link href="/login" underline="none"> <ArrowBackIcon /> <div className={classes.voltar}>Voltar</div></Link>
                     <Grid container direction="column" justify="space-around" alignItems="stretch">
-                        <TextField variant="outlined"  id="email" margin="normal" fullWidth required name="email" label="E-mail" type="email" value={form.email} onChange={handleChange} />
-                        <TextField variant="outlined" min="6" id="password" margin="normal" fullWidth required name="password" label="password" type="password" value={form.password} onChange={handleChange} />
-                        <Link href="/esqueci-minha-senha" variant="body2" underline="none">
-                            Esqueceu sua senha?
-                        </Link>
+                        <TextField variant="outlined" id="email" margin="normal" fullWidth required name="email" label="E-mail" type="email" value={form.email} onChange={handleChange} />
                         <Button variant="outlined" color="primary" type="submit" className={classes.submit}>
-                            Entrar
+                            Enviar senha
                         </Button>
-                        <GoogleButton onClick={handleGoogleLogin}  label='Entrar com o google' style={{width: '100%', marginBottom: '10px'}}/>
-                        <center>
-                            <Link href="/esqueci-minha-senha" variant="body2" underline="none">
-                                Ainda não possuo uma conta !
-                            </Link>
-                        </center>
                     </Grid>
                 </div>
             </form>
@@ -110,10 +79,19 @@ export default function Login() {
 }
 
 const useStyles = makeStyles(theme => ({
-    title :{
+    success: {
+        backgroundColor: green[600],
+      },
+    voltar: {
+        position: 'relative',
+        top: '-25px',
+        left: '25px',
+        width: '40px'
+    },
+    title: {
         color: "#FFF",
         position: "relative",
-        top: '70px'        
+        top: '130px'
     },
     submit: {
         margin: theme.spacing(5, 0, 2),

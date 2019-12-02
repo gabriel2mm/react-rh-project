@@ -1,15 +1,16 @@
 import firebase from 'firebase';
 
 const config = {
-  apiKey: "AIzaSyDn-swNY-wtvhkF-0ILaMZm5Y57EbRkcBs",
-  authDomain: "rhproject-94ff0.firebaseapp.com",
-  databaseURL: "https://rhproject-94ff0.firebaseio.com",
-  projectId: "rhproject-94ff0",
-  storageBucket: "rhproject-94ff0.appspot.com",
-  messagingSenderId: "869599162334",
-  appId: "1:869599162334:web:d17464ec0e59cbf6ac374f",
-  measurementId: "G-PMMLF3480W"
+  apiKey: "AIzaSyDNPkLuDei0-Zw6kQ4yOqKyamUI2v7XgZs",
+  authDomain: "projeto-rh-9d55b.firebaseapp.com",
+  databaseURL: "https://projeto-rh-9d55b.firebaseio.com",
+  projectId: "projeto-rh-9d55b",
+  storageBucket: "projeto-rh-9d55b.appspot.com",
+  messagingSenderId: "128621950216",
+  appId: "1:128621950216:web:10ced13f20bbd3ccae28bd",
+  measurementId: "G-MQGPVV7R2X"
 };
+const firebaseImpl = firebase.initializeApp(config);
+firebaseImpl.analytics();
 
-export const firebaseImpl = firebase.initializeApp(config);
-export const firebaseDatabase = firebase.database();
+export default firebaseImpl;
