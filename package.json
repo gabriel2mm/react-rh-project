@@ -15,6 +15,7 @@
     "react-scripts": "3.2.0",
     "react-with-firebase-auth": "^1.2.0",
     "redux": "^4.0.4",
+    "redux-persist": "^6.0.0",
     "styled-components": "^4.4.1"
   },
   "scripts": {

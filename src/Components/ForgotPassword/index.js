@@ -23,9 +23,9 @@ export default function ForgotPassword() {
             .sendPasswordResetEmail(form.email);
 
         user.then(response => {
-            setForm({...form, error: "Solicitação enviada!", classe: "success", snack: {open: true}})
+            setForm({ ...form, error: "Solicitação enviada!", classe: "success", snack: { open: true } })
         }).catch(e => {
-            setForm({...form, classe: "error", error: "Não foi possível validar e-mail, verifique e tente novamente!", snack: {open: true}})
+            setForm({ ...form, classe: "error", error: "Não foi possível validar e-mail, verifique e tente novamente!", snack: { open: true } })
         });
     }
 
@@ -60,12 +60,16 @@ export default function ForgotPassword() {
                     ]}
                 />
             </Snackbar>
-            <Typography component="h1" variant="h5" align="center" className={classes.title}>
-                RDCurriculum
-            </Typography>
             <form onSubmit={handleSubmitCredentials} autoComplete="off">
                 <div className="form-container">
-                    <Link href="/login" underline="none"> <ArrowBackIcon /> <div className={classes.voltar}>Voltar</div></Link>
+                    <div className={classes.backLogo}>
+                        <Typography component="h1" variant="h5" align="center" className={classes.title}>
+                            RDCurriculum
+                        </Typography>
+                        <div>
+                            <Link href="/login" underline="none"> <ArrowBackIcon /> <div className={classes.voltar}>Voltar</div></Link>
+                        </div>
+                    </div>
                     <Grid container direction="column" justify="space-around" alignItems="stretch">
                         <TextField variant="outlined" id="email" margin="normal" fullWidth required name="email" label="E-mail" type="email" value={form.email} onChange={handleChange} />
                         <Button variant="outlined" color="primary" type="submit" className={classes.submit}>
@@ -79,9 +83,18 @@ export default function ForgotPassword() {
 }
 
 const useStyles = makeStyles(theme => ({
+    backLogo: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+        alignContent: 'center',
+
+    },
     success: {
         backgroundColor: green[600],
-      },
+    },
     voltar: {
         position: 'relative',
         top: '-25px',
@@ -89,9 +102,7 @@ const useStyles = makeStyles(theme => ({
         width: '40px'
     },
     title: {
-        color: "#FFF",
-        position: "relative",
-        top: '130px'
+        
     },
     submit: {
         margin: theme.spacing(5, 0, 2),
