@@ -1,18 +1,22 @@
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, {useEffect} from 'react';
+import { useDispatch } from 'react-redux';
 import './home.css';
 
 export default function Home() {
 
-  const user = useSelector(state => state.user)
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+  const dispatch = useDispatch();
+  useEffect(() => {  
+  }, [])
   
+  function handleLogout(event) {
+    event.preventDefault();
+    dispatch({ type: "LOGOUT" });
+  }
+
   return (
     <>
-        <h1>Você está logado</h1>
+      <h1>Você está logado</h1>
+      <span onClick={handleLogout}>Deslogar</span>
     </>
   );
 }
