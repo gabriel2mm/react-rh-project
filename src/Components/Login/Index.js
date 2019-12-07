@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useRef} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router";
-import { Button, TextField, Grid, Typography, Link, SnackbarContent, Snackbar, IconButton } from '@material-ui/core';
+import { Button, TextField, Link, SnackbarContent, Snackbar, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import ErrorIcon from '@material-ui/icons/ErrorOutline';
 import firebaseImpl from '../../Utils/firebase';
 import firebase from 'firebase';
-import GoogleButton from 'react-google-button';
 import './login.css';
 
 export default function Login() {
@@ -15,10 +14,10 @@ export default function Login() {
     const provider = useRef("")
     const history = useHistory()
     const classes = useStyles()
-    const [form, setForm] = useState({ email: "", password: "", error: null, snack: { vertical: 'left', horizontal: 'top', open: false }})
+    const [form, setForm] = useState({ email: "", password: "", error: null, snack: { vertical: 'left', horizontal: 'top', open: false } })
     const dispatch = useDispatch()
     const user = useSelector(state => state.user);
-    
+
     useEffect(() => {
         firebaseImpl.auth().setPersistence('session')
         provider.current = new firebase.auth.GoogleAuthProvider()
@@ -42,7 +41,7 @@ export default function Login() {
                 setForm({ ...form, error: "Usuário e/ou senha inválidos! Tente novamente.", snack: { ...form.snack, open: true } });
             })
     }
-    
+
     function handleGoogleLogin(e) {
         e.preventDefault()
         const loginWithGoogle = firebaseImpl.auth().signInWithPopup(provider.current)
@@ -55,12 +54,12 @@ export default function Login() {
         })
     }
 
-    function verifyUser(user){
-        dispatch({type: 'LOGIN', user: {...user, logado: 1}})
+    function verifyUser(user) {
+        dispatch({ type: 'LOGIN', user: { ...user, logado: 1 } })
     }
 
     function handleClose() {
-        setForm({ ...form, snack: { ...form.snack, open: false }})
+        setForm({ ...form, snack: { ...form.snack, open: false } })
     }
 
     return (
@@ -91,40 +90,73 @@ export default function Login() {
                 />
             </Snackbar>
             {user != null ? history.push('/home') : (<></>)}
-            <form onSubmit={handleSubmitCredentials} autoComplete="off">
-                <div className="form-container">
-                    <Typography component="h1" variant="h5" align="center" className={classes.title}>
-                        RDCurriculum
-                    </Typography>
-                    <Grid container direction="column" justify="space-around" alignItems="stretch">
-                        <TextField variant="outlined" id="email" margin="normal" fullWidth required name="email" label="E-mail" type="email" value={form.email} onChange={handleChange} />
-                        <TextField variant="outlined" min="6" id="password" margin="normal" fullWidth required name="password" label="password" type="password" value={form.password} onChange={handleChange} />
-                        <Link href="/esqueci-minha-senha" variant="body2" underline="none">
-                            Esqueceu sua senha?
-                        </Link>
-                        <Button variant="outlined" color="primary" type="submit" className={classes.submit}>
-                            Entrar
-                        </Button>
-                        <GoogleButton onClick={handleGoogleLogin} label='Entrar com o google' style={{ width: '100%', marginBottom: '10px' }} />
+            <div className="container-login">
+                <div className="login-know-more">
+                    <div className="login-padding">
+                        <div className="title-know-more">
+                            Seja bem-vindo a Curr++
+                    </div>
+                        <div className="divider"></div>
+                        <div className="text-know-more">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                        </div>
                         <center>
-                            <Link href="/esqueci-minha-senha" variant="body2" underline="none">
-                                Ainda não possuo uma conta !
-                            </Link>
+                            <div className="container-button-know-more">
+                                <Button variant="outlined" className={classes.knowmore}>
+                                    Saiba mais
+                                </Button>
+                            </div>
                         </center>
-                    </Grid>
+                    </div>
                 </div>
-            </form>
+                <div className="sig-in">
+                    <div className="login-padding">
+                    <Link href="/esqueci-minha-senha" underline="none" className={classes.ajusteLink}>
+                        Ainda não possuo uma conta
+                            </Link>
+                        <div className="title">
+                            <h3>Sigin</h3>
+                        </div>
+                        <div className="divider black"></div>
+                        <form onSubmit={handleSubmitCredentials} autoComplete="off">
+                            <div className="container-sigin">
+                                <TextField variant="outlined" id="email" margin="normal" fullWidth required name="email" label="E-mail" type="email" value={form.email} onChange={handleChange} />
+                                <TextField variant="outlined" min="6" id="password" margin="normal" fullWidth required name="password" label="password" type="password" value={form.password} onChange={handleChange} />
+                                <Link href="/esqueci-minha-senha" variant="body2" underline="none">
+                                    Esqueceu sua senha?
+                                </Link>
+                                <div className="Buttons">
+                                    <Button variant="outlined" color="primary" type="submit" className={classes.submit}>
+                                        Entrar
+                                    </Button>
+                                    <Button variant="outlined" color="primary" type="submit" className={classes.submit} style={{ marginLeft: '10px' }} onClick={handleGoogleLogin}>
+                                        Sigin Google
+                                    </Button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </>
     );
 }
 
 const useStyles = makeStyles(theme => ({
+    knowmore: {
+        height: '45px',
+        color: '#FFF',
+        border: '1px solid #FFF'
+
+    },
     title: {
         color: "#333",
     },
     submit: {
-        margin: theme.spacing(5, 0, 2),
-        height: '45px'
+        width: '50%',
+        margin: theme.spacing(1, 0, 2),
+        height: '45px',
+        minWidth: "130px"
     },
     error: {
         backgroundColor: theme.palette.error.dark,
@@ -140,4 +172,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
     },
+    ajusteLink: {
+        marginTop: '-10px'
+    }
 }))
